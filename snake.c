@@ -95,6 +95,9 @@ void snake_update() {
 }
 
 void redraw_canvas() {
+  printf("\033[2J");
+  printf("\033[H");
+
   for (size_t y = 0; y < CANVAS_HEIGHT; y++) {
     for (size_t x = 0; x < CANVAS_WIDTH; x++) {
       int r, g, b;
@@ -127,10 +130,9 @@ void redraw_canvas() {
     printf("\n");
   }
 
-  printf("Press 'q' to exit. Score: %d\n", score);
+  printf("\033[m");
 
-  printf("\033[%dA", CANVAS_WIDTH * 2);
-  printf("\033[%dD", CANVAS_HEIGHT + 1);
+  printf("Press 'q' to exit. Score: %d\n", score);
 }
 
 int main(void) {
@@ -174,7 +176,7 @@ int main(void) {
     snake_update();
     redraw_canvas();
 
-    usleep(150 * 1000);
+    usleep(200 * 1000);
   }
 
   term.c_lflag |= ECHO; 
