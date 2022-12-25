@@ -62,16 +62,16 @@ int game_update() {
       return 1;
       break;
     case 'w':
-      snake.dir = DIR_UP;
+      if (snake.dir != DIR_DOWN) snake.dir = DIR_UP;
       break;
     case 's':
-      snake.dir = DIR_DOWN;
+      if (snake.dir != DIR_UP) snake.dir = DIR_DOWN;
       break;
     case 'a':
-      snake.dir = DIR_LEFT;
+      if (snake.dir != DIR_RIGHT) snake.dir = DIR_LEFT;
       break;
     case 'd':
-      snake.dir = DIR_RIGHT;
+      if (snake.dir != DIR_LEFT) snake.dir = DIR_RIGHT;
       break;
   }
 
