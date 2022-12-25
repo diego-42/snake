@@ -118,6 +118,14 @@ State game_update() {
     }
   }
 
+  if (head.x < 0) head.x = CANVAS_WIDTH - 1;
+  else if (head.x >= CANVAS_WIDTH) head.x = 0;
+
+  if (head.y < 0) head.y = CANVAS_HEIGHT - 1;
+  else if (head.y >= CANVAS_HEIGHT) head.y = 0;
+
+  snake.segs[0] = head;
+
   if (snake.segs[0].x == fruit.x && snake.segs[0].y == fruit.y) {
     fruit.x = rand() % (CANVAS_WIDTH - 1);
     fruit.y = rand() % (CANVAS_HEIGHT - 1);
