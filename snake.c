@@ -54,7 +54,27 @@ Snake snake = {0};
 Fruit fruit = {0};
 int score = 0;
 
-void snake_update() {
+int game_update() {
+  int x = getchar();
+
+  switch (x) {
+    case 'q':
+      return 1;
+      break;
+    case 'w':
+      snake.dir = DIR_UP;
+      break;
+    case 's':
+      snake.dir = DIR_DOWN;
+      break;
+    case 'a':
+      snake.dir = DIR_LEFT;
+      break;
+    case 'd':
+      snake.dir = DIR_RIGHT;
+      break;
+  }
+
   Segment current = snake.segs[0];
 
   for (size_t i = 1; i < snake.size; i++) {
@@ -88,13 +108,12 @@ void snake_update() {
 
     score++;
 
-    return;
-  }
-
-  snake.size--;
+  } else snake.size--;
+  
+  return 0;
 }
 
-void redraw_canvas() {
+void game_render() {
   printf("\033[2J");
   printf("\033[H");
 
@@ -153,28 +172,8 @@ int main(void) {
   int quit = 0;
 
   while (!quit) {
-    int x = getchar();
-
-    switch (x) {
-      case 'q':
-        quit = 1;
-        break;
-      case 'w':
-        snake.dir = DIR_UP;
-        break;
-      case 's':
-        snake.dir = DIR_DOWN;
-        break;
-      case 'a':
-        snake.dir = DIR_LEFT;
-        break;
-      case 'd':
-        snake.dir = DIR_RIGHT;
-        break;
-    }
-
-    snake_update();
-    redraw_canvas();
+    quit = game_update();
+    game_render();
 
     usleep(200 * 1000);
   }
