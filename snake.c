@@ -83,8 +83,8 @@ void snake_update() {
   }
 
   if (snake.segs[0].x == fruit.x && snake.segs[0].y == fruit.y) {
-    fruit.x = rand() % CANVAS_WIDTH;
-    fruit.y = rand() % CANVAS_HEIGHT;
+    fruit.x = rand() % (CANVAS_WIDTH - 1);
+    fruit.y = rand() % (CANVAS_HEIGHT - 1);
 
     score++;
 
@@ -147,8 +147,8 @@ int main(void) {
   fcntl(0, F_SETFL, O_NONBLOCK);
 
   snake.segs[snake.size++] = (Segment){.x = 20, .y = 20};
-  fruit.x = rand() % CANVAS_WIDTH;
-  fruit.y = rand() % CANVAS_HEIGHT;
+  fruit.x = rand() % (CANVAS_WIDTH - 1);
+  fruit.y = rand() % (CANVAS_HEIGHT - 1);
 
   int quit = 0;
 
