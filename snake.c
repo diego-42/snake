@@ -18,6 +18,12 @@ void get_rgb_from_color(int color, int *r, int *g, int *b) {
   *b = (color >> 0) & 0xff;
 }
 
+typedef enum State {
+  STATE_PLAYING = 0,
+  STATE_QUIT,
+  STATE_GAME_OVER,
+} State;
+
 typedef enum Dir {
   DIR_UP = 0,
   DIR_DOWN,
@@ -54,12 +60,12 @@ Snake snake = {0};
 Fruit fruit = {0};
 int score = 0;
 
-int game_update() {
+State game_update() {
   int x = getchar();
 
   switch (x) {
     case 'q':
-      return 1;
+      return STATE_QUIT;
       break;
     case 'w':
       if (snake.dir != DIR_DOWN) snake.dir = DIR_UP;
@@ -102,6 +108,16 @@ int game_update() {
       break;
   }
 
+  Segment head = snake.segs[0];
+
+  for (size_t i = 1; i < snake.size; i++) {
+    Segment body = snake.segs[i];
+
+    if (head.x == body.x && head.y == body.y) {
+      return STATE_GAME_OVER;
+    }
+  }
+
   if (snake.segs[0].x == fruit.x && snake.segs[0].y == fruit.y) {
     fruit.x = rand() % (CANVAS_WIDTH - 1);
     fruit.y = rand() % (CANVAS_HEIGHT - 1);
@@ -110,10 +126,10 @@ int game_update() {
 
   } else snake.size--;
   
-  return 0;
+  return STATE_PLAYING;
 }
 
-void game_render() {
+void game_render(State state) {
   printf("\033[2J");
   printf("\033[H");
 
@@ -151,7 +167,16 @@ void game_render() {
 
   printf("\033[m");
 
-  printf("Press 'q' to exit. Score: %d\n", score);
+  switch (state) {
+    case STATE_PLAYING:
+      printf("Press 'q' to exit. Score: %d\n", score);
+      break;
+    case STATE_QUIT:
+      printf("Quiting...\n");
+      break;
+    case STATE_GAME_OVER:
+      printf("Game over. Total score: %d\n", score);
+  }
 }
 
 int main(void) {
@@ -172,8 +197,13 @@ int main(void) {
   int quit = 0;
 
   while (!quit) {
-    quit = game_update();
-    game_render();
+    State state = game_update();
+
+    if (state == STATE_QUIT || state == STATE_GAME_OVER) {
+      quit = 1;
+    }
+
+    game_render(state);
 
     usleep(200 * 1000);
   }
